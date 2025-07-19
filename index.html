@@ -1,24 +1,60 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Randomizador de Perks DBD</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background-color: #111;
+      color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    h1 {
+      color: #e50914;
+      font-size: 3rem;
+    }
+    p {
+      max-width: 600px;
+      margin: auto;
+      line-height: 1.6;
+    }
+    .cta {
+      margin-top: 30px;
+    }
+    .cta a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #e50914;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+    .cta a:hover {
+      background-color: #ff2a2a;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
 </head>
 <body>
-  <h1>Randomizador de Perks DBD</h1>
-  <select id="role" onchange="renderPerks()">
-    <option value="survivor">Superviviente</option>
-    <option value="killer">Asesino</option>
-  </select>
-  <button onclick="randomizePerks()">Randomizar</button>
+  <h1>Randomizador de Perks de Dead by Daylight</h1>
+  <p>
+    ¿No sabes qué perks usar? ¡Este randomizador te ayudará a crear combinaciones únicas y divertidas!
+    Selecciona si juegas como superviviente o asesino, excluye las perks que no quieras, y obtén 4 perks al azar para tu próxima partida.
+  </p>
 
-  <p id="perkCount"></p>
-  <div class="perk-grid" id="perkContainer"></div>
-  <div class="result" id="result"></div>
+  <div class="cta">
+    <a href="randomizador.html">Ir al Randomizador</a>
+  </div>
 
-  <script src="perks-data.js"></script>
-  <script src="script.js"></script>
+  <footer>
+    Creado por fans de DBD. No afiliado a Behaviour Interactive.
+  </footer>
 </body>
 </html>
