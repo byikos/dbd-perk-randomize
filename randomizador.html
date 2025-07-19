@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Randomizador de Perks DBD</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #e50914;
+      font-size: 2.5rem;
+    }
+    select, button {
+      font-size: 1rem;
+      padding: 10px 15px;
+      margin: 10px;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #e50914;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ff2a2a;
+    }
+    .perk-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .perk-card {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 10px;
+      width: 140px;
+      transition: transform 0.2s;
+    }
+    .perk-card:hover {
+      transform: scale(1.05);
+    }
+    .perk-card img {
+      width: 64px;
+      height: 64px;
+    }
+    .perk-card label {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+    .result {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Randomizador de Perks DBD</h1>
+  <select id="role" onchange="renderPerks()">
+    <option value="survivor">Superviviente</option>
+    <option value="killer">Asesino</option>
+  </select>
+  <button onclick="randomizePerks()">Randomizar</button>
+
+  <div class="perk-grid" id="perkContainer"></div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const survivorPerks = [
+      { name: "Adrenaline", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/2/2d/Adrenaline.gif" },
+      { name: "Balanced Landing", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f5/BalancedLanding.gif" },
+      { name: "Borrowed Time", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/8/80/BorrowedTime.gif" },
+      { name: "Dead Hard", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/7/77/DeadHard.gif" },
+      { name: "Decisive Strike", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f3/DecisiveStrike.gif" },
+      { name: "Deliverance", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f7/Deliverance.gif" },
+      { name: "Detective's Hunch", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f1/DetectivesHunch.gif" },
+      { name: "Empathy", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/67/Empathy.gif" },
+      { name: "Head On", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f7/HeadOn.gif" },
+      { name: "Hope", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/d/d1/Hope.gif" },
+      { name: "Inner Healing", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/3b/InnerHealing.gif" },
+      { name: "Iron Will", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/2/24/IronWill.gif" },
+      { name: "Kindred", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/b8/Kindred.gif" },
+      { name: "Leader", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/0/0a/Leader.gif" },
+      { name: "Lightweight", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/6a/Lightweight.gif" },
+      { name: "No Mither", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/66/NoMither.gif" },
+      { name: "Object of Obsession", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/8/80/ObjectOfObsession.gif" },
+      { name: "Off the Record", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f5/OffTheRecord.gif" },
+      { name: "Plunderer's Instinct", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/c/c2/PlunderersInstinct.gif" },
+      { name: "Prove Thyself", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/d/df/ProveThyself.gif" },
+      { name: "Quick & Quiet", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/e/e3/QuickAndQuiet.gif" },
+      { name: "Red Herring", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/d/db/RedHerring.gif" },
+      { name: "Resilience", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/5/59/Resilience.gif" },
+      { name: "Self-Care", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/7/77/SelfCare.gif" },
+      { name: "Slippery Meat", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/3b/SlipperyMeat.gif" },
+      { name: "Small Game", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/33/SmallGame.gif" },
+      { name: "Soul Guard", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/3a/SoulGuard.gif" },
+      { name: "Sprint Burst", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/7/7a/SprintBurst.gif" },
+      { name: "Technician", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/bb/Technician.gif" },
+      { name: "Urban Evasion", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/fc/UrbanEvasion.gif" }
+    ];
+
+    const killerPerks = [
+      { name: "Barbecue & Chili", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/e/e4/BarbecueAndChili.gif" },
+      { name: "Bamboozle", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/b1/Bamboozle.gif" },
+      { name: "Beast of Prey", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/0/00/BeastOfPrey.gif" },
+      { name: "Blood Echo", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/d/d2/BloodEcho.gif" },
+      { name: "Blood Warden", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/1/12/BloodWarden.gif" },
+      { name: "Brutal Strength", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f3/BrutalStrength.gif" },
+      { name: "Corrupt Intervention", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/4/42/CorruptIntervention.gif" },
+      { name: "Coulrophobia", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/f/f4/Coulrophobia.gif" },
+      { name: "Discordance", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/6f/Discordance.gif" },
+      { name: "Enduring", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/8/89/Enduring.gif" },
+      { name: "Hex: Devour Hope", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/3b/HexDevourHope.gif" },
+      { name: "Hex: Huntress Lullaby", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/b7/HexHuntressLullaby.gif" },
+      { name: "Hex: No One Escapes Death", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/6f/HexNoOneEscapesDeath.gif" },
+      { name: "Hex: Ruin", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/5/55/HexRuin.gif" },
+      { name: "Hex: The Third Seal", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/0/0f/HexTheThirdSeal.gif" },
+      { name: "Hex: Thrill of the Hunt", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/2/23/HexThrillOfTheHunt.gif" },
+      { name: "Infectious Fright", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/7/74/InfectiousFright.gif" },
+      { name: "Iron Grasp", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/b0/IronGrasp.gif" },
+      { name: "Jolt", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/38/Jolt.gif" },
+      { name: "Lightborn", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/b/b9/Lightborn.gif" },
+      { name: "Monstrous Shrine", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/4/4b/MonstrousShrine.gif" },
+      { name: "Overcharge", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/0/0d/Overcharge.gif" },
+      { name: "Play with Your Food", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/5/5d/PlayWithYourFood.gif" },
+      { name: "Pop Goes the Weasel", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/2/2f/PopGoesTheWeasel.gif" },
+      { name: "Predator", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/e/e4/Predator.gif" },
+      { name: "Save the Best for Last", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/d/d6/SaveTheBestForLast.gif" },
+      { name: "Scourge Hook: Pain Resonance", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/3/30/ScourgeHookPainResonance.gif" },
+      { name: "Spies from the Shadows", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/2/25/SpiesFromTheShadows.gif" },
+      { name: "Spirit Fury", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/5/52/SpiritFury.gif" },
+      { name: "Surveillance", img: "https://static.wikia.nocookie.net/deadbydaylight_gamepedia/images/6/6c/Surveillance.gif" }
+    ];
+
+    function renderPerks() {
+      const role = document.getElementById("role").value;
+      const perks = role === "survivor" ? survivorPerks : killerPerks;
+      const container = document.getElementById("perkContainer");
+      container.innerHTML = '';
+
+      perks.forEach((perk, index) => {
+        const div = document.createElement("div");
+        div.className = "perk-card";
+        div.innerHTML = `
+          <img src="${perk.img}" alt="${perk.name}" />
+          <label><input type="checkbox" id="exclude-${index}"> ${perk.name}</label>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function randomizePerks() {
+      const role = document.getElementById("role").value;
+      const perks = role === "survivor" ? [...survivorPerks] : [...killerPerks];
+      const available = perks.filter((_, i) => !document.getElementById(`exclude-${i}`).checked);
+
+      const result = document.getElementById("result");
+      result.innerHTML = "";
+
+      if (available.length < 4) {
+        result.innerHTML = "<p>No hay suficientes perks disponibles.</p>";
+        return;
+      }
+
+      const selected = [];
+      while (selected.length < 4) {
+        const rand = available[Math.floor(Math.random() * available.length)];
+        if (!selected.includes(rand)) selected.push(rand);
+      }
+
+      selected.forEach(perk => {
+        const div = document.createElement("div");
+        div.className = "perk-card";
+        div.innerHTML = `
+          <img src="${perk.img}" alt="${perk.name}" />
+          <strong>${perk.name}</strong>
+        `;
+        result.appendChild(div);
+      });
+    }
+
+    renderPerks();
+  </script>
+</body>
+</html>
