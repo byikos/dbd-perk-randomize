@@ -124,7 +124,7 @@ const survivorPerks = [
 const killerPerks = [
   {
     "name": "Barbecue & Chili",
-    "img": "https://gigglingcorpse.com/dev/deadbydaylight/images/barbecue_and_chili.png"
+    "img": "https://gigglingcorpse.com/dev/deadbydaylight/images/barbecue__chilli.png"
   },
   {
     "name": "Hex: Ruin",
@@ -196,7 +196,7 @@ const killerPerks = [
   },
   {
     "name": "Monitor & Abuse",
-    "img": "https://gigglingcorpse.com/dev/deadbydaylight/images/monitor_and_abuse.png"
+    "img": "https://gigglingcorpse.com/dev/deadbydaylight/images/monitor__abuse.png"
   },
   {
     "name": "Coulrophobia",
