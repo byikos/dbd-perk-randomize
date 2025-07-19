@@ -1,87 +1,24 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Inicio - Randomizador DBD</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #0a0a0a, #1a1a1a);
-      color: #f2f2f2;
-    }
-    header {
-      padding: 60px 20px 30px;
-      text-align: center;
-      background-color: #111;
-    }
-    header h1 {
-      font-size: 3rem;
-      color: #e50914;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-      line-height: 1.6;
-      font-size: 1.1rem;
-    }
-    .cta {
-      text-align: center;
-      margin: 40px 0;
-    }
-    .cta a {
-      background-color: #e50914;
-      color: white;
-      padding: 15px 25px;
-      font-size: 1.1rem;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-    .cta a:hover {
-      background-color: #ff2a2a;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #111;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-  </style>
+  <title>Randomizador de Perks DBD</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Randomizador de Perks - Dead by Daylight</h1>
-  </header>
-  <div class="container">
-    <p>
-      Esta herramienta te permite generar una combinación aleatoria de perks para Supervivientes o Asesinos en <strong>Dead by Daylight</strong>.
-      ¡Perfecta para desafiarte, practicar builds nuevas o simplemente divertirte en tus partidas!
-    </p>
+  <h1>Randomizador de Perks DBD</h1>
+  <select id="role" onchange="renderPerks()">
+    <option value="survivor">Superviviente</option>
+    <option value="killer">Asesino</option>
+  </select>
+  <button onclick="randomizePerks()">Randomizar</button>
 
-    <h2>¿Cómo funciona?</h2>
-    <ul>
-      <li>Selecciona si quieres perks para <strong>Superviviente</strong> o <strong>Asesino</strong>.</li>
-      <li>Opcionalmente, excluye perks que no quieras usar marcando las casillas.</li>
-      <li>Haz clic en <em>Randomizar</em> y recibirás 4 perks aleatorios.</li>
-    </ul>
+  <p id="perkCount"></p>
+  <div class="perk-grid" id="perkContainer"></div>
+  <div class="result" id="result"></div>
 
-    <p>
-      Cada perk incluye su nombre e icono oficial del juego para que puedas identificarla fácilmente.
-    </p>
-
-    <div class="cta">
-      <a href="randomizador.html">Probar el Randomizador</a>
-    </div>
-  </div>
-  <footer>
-    Creado por fans para fans de DBD. No afiliado a Behaviour Interactive.
-  </footer>
+  <script src="perks-data.js"></script>
+  <script src="script.js"></script>
 </body>
-
-<script src="perks-data.js"></script>
-
 </html>
